@@ -39,7 +39,12 @@
   let songs = [];
   let search = "";
   let filter;
-  $: filter = googlish(search, false, false, x => `${x.title}`);
+  $: filter = googlish(
+    search,
+    false,
+    false,
+    x => `${x.title + x.author + x.lyrics}`
+  );
 
   async function init() {
     songBook = await songBooks.find(params.songBookId);
