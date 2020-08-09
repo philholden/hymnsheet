@@ -31,10 +31,10 @@ Hymn sheet was built to allow large groups to worship in the open air. It should
 
 > Whoever acknowledges me before men, I will also acknowledge before my Father in heaven.
 
-You are encouraged to give it a try and post the results (we have an issue open for this just add comments and links to video). This is an early release of this software and we need people to test it out and let us know their experience we will continue to improve the UX and to fix issues.
+You are encouraged to give it a try and post the results (we have an issue open for this just add comments and links to videos). This is an early release of this software and we need people to test it out and let us know their experience we will continue to improve the UX and to fix issues.
 
 The aim is for this to be a polished app in time for singing carols around the world this Christmas.
 
 ## Thanks
 
-Hymn sheet began at the Hack FS hackathon thanks to everyone who helped by answer questions.
+Hymn sheet began at the Hack FS hackathon thanks to everyone who helped by answering questions.
