@@ -2,11 +2,18 @@
 <html>
   <head>
     <script type="module" src="swstuff.js"></script>
-    <script type="module">
-      // This is the "Offline page" service worker
-      // import "swstuff.js";
-      const el = document.createElement("pwa-update");
-      document.body.appendChild(el);
+    <script>
+      // Check that service workers are supported
+      if (
+        "serviceWorker" in navigator
+        //  &&  !/localhost/.test(window.location.host) &&
+        //     !/127\.0\.0\.1/.test(window.location.host)
+      ) {
+        // Use the window load event to keep the page load performant
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/service-worker.js");
+        });
+      }
     </script>
 
     <meta charset="utf8" />

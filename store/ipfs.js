@@ -6,7 +6,7 @@ export async function getIpfs() {
   if (!_ipfs) {
     _ipfs = IPFS.create({
       EXPERIMENTAL: {
-        pubsub: true
+        pubsub: true,
         //        ipnsPubsub: true
       },
       pass,
@@ -16,11 +16,12 @@ export async function getIpfs() {
           Swarm: [
             // "/ip4/127.0.0.1/tcp/4002/p2p/QmWCfY2M8Nqj4wE8epzh5daUVes2AWXHyAskRDR3NpFxr1",
             // "/ip4/127.0.0.1/tcp/5002/http",
-            "/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star/"
+            "/dns4/webrtc-star5.glitch.me/tcp/443/wss/p2p-webrtc-star/",
+            //    "/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star/",
             //  "/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star/"
-          ]
-        }
-      }
+          ],
+        },
+      },
     });
   }
   return await _ipfs;

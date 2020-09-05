@@ -12,10 +12,12 @@
     let qr = new QRious({
       element: el,
       value: url,
-      size
+      size,
+      level: "M"
     });
   });
 </script>
+
 <style>
   canvas {
     image-rendering: pixelated;
@@ -28,4 +30,4 @@
   }
 </style>
 
-<canvas bind:this={el} style={style}></canvas>
+<canvas bind:this={el} {style} />
