@@ -7,7 +7,9 @@ const prod = mode === "production";
 
 module.exports = {
   entry: {
-    bundle: ["./index.js"],
+    bundle: ["./src/index.js"],
+    pdfViewer: ["./pdfViewer/index.js"],
+    "pdf.worker": ["./node_modules/pdfjs-dist/build/pdf.worker.entry"],
   },
   resolve: {
     alias: {
@@ -30,6 +32,19 @@ module.exports = {
           options: {
             emitCss: true,
             hotReload: true,
+            // hotOptions: {
+            //   // whether to preserve local state (i.e. any `let` variable) or
+            //   // only public props (i.e. `export let ...`)
+            //   noPreserveState: false,
+            //   // optimistic will try to recover from runtime errors happening
+            //   // during component init. This goes funky when your components are
+            //   // not pure enough.
+            //   optimistic: true,
+
+            //   // See docs of svelte-loader-hot for all available options:
+            //   //
+            //   // https://github.com/rixo/svelte-loader-hot#usage
+            // },
           },
         },
       },
