@@ -109,7 +109,7 @@
         href={`/channel/${params.channelId}/songbook/select`}
         icon="live"
         title="Broadcast now">
-        Go live, then select verses for singers to sing.
+        Go live, then select verses to sing.
       </ButtonContent>
       <ButtonContent
         href="/"

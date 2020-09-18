@@ -3,3 +3,7 @@ node_modules
 public/bundle.*
 package-lock.json
 yarn.lock
+public/pdf.worker.js
+public/pdfViewer.css
+public/pdfViewer.js
+public/service-worker.js

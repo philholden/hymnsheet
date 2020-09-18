@@ -41,6 +41,8 @@
 
   routes.set(/^\/(v|c|s)$/, Go);
   routes.set("*", Home);
+  if (window.registration && window.registration.update)
+    window.registration.update();
 </script>
 
 <style>

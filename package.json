@@ -25,20 +25,20 @@
     "workbox-webpack-plugin": "^5.1.3"
   },
   "dependencies": {
-    "@omysoul/svelte-song-display": "0.4.3",
-    "googlish": "0.0.8",
-    "idb-keyval": "3.2.0",
-    "ipfs": "0.48.1",
-    "jsqr": "1.3.1",
+    "@omysoul/svelte-song-display": "^0.4.3",
+    "googlish": "^0.0.8",
+    "idb-keyval": "^3.2.0",
+    "ipfs": "^0.50.2",
+    "jsqr": "^1.3.1",
     "pdfjs-dist": "^2.4.456",
-    "qrious": "4.0.2",
-    "readable-stream": "3.6.0",
-    "resize-observer-polyfill": "1.5.1",
-    "svelte": "3.24.0",
-    "svelte-routing": "1.4.2",
-    "svelte-simple-modal": "0.4.2",
-    "svelte-spa-router": "2.2.0",
-    "urlon": "3.0.1"
+    "qrious": "^4.0.2",
+    "readable-stream": "^3.6.0",
+    "resize-observer-polyfill": "^1.5.1",
+    "svelte": "^3.24.0",
+    "svelte-routing": "^1.4.2",
+    "svelte-simple-modal": "^0.4.2",
+    "svelte-spa-router": "^2.2.0",
+    "urlon": "^3.0.1"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",

@@ -15,7 +15,8 @@ module.exports = {
 
       urlPattern: /^https:\/\/ipfs\.io\/ipfs/,
       // 'fastest' is now 'StaleWhileRevalidate'
-      handler: "CacheFirst",
+      // handler: "CacheFirst",
+      handler: "StaleWhileRevalidate",
       options: {
         // options.cache.name is now options.cacheName
         cacheName: "song-cache",
