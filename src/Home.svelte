@@ -14,6 +14,8 @@
   import { fade } from "svelte/transition";
   let notwebp = !canUseWebP();
   let showModal = false;
+  if (window.registration && window.registration.update)
+    window.registration.update();
 </script>
 
 <style>
