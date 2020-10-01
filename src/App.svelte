@@ -2,7 +2,7 @@
   import Router from "svelte-spa-router";
   import Home from "./Home.svelte";
   import JoinGroup from "./JoinGroup.svelte";
-  import DisplaySong from "./DisplaySong.svelte";
+  import DisplaySwitcher from "./DisplaySwitcher.svelte";
   import IconPage from "./IconPage.svelte";
   import SongListAdd from "./SongListAdd.svelte";
   import SongBookListAdd from "./SongBookListAdd.svelte";
@@ -13,13 +13,14 @@
   import Poster from "./Poster.svelte";
   import VerseSelect from "./VerseSelect";
   import Go from "./Go";
+  import Pdf from "./Pdf";
   import { link } from "svelte-spa-router";
   import Modal from "svelte-simple-modal";
   const routes = new Map();
   routes.set("/", Home);
   routes.set("/icon", IconPage);
   routes.set("/joingroup", JoinGroup);
-  routes.set("/displaysong/:channelId", DisplaySong);
+  routes.set("/displaysong/:channelId", DisplaySwitcher);
   routes.set("/songbook/:songBookId/song/list/add", SongListAdd);
   routes.set(
     "/channel/:channelId/songbook/:songBookId/song/select",
@@ -37,6 +38,7 @@
   routes.set("/channel/list/add", ChannelListAdd);
   routes.set("/channel/:channelId/manage", ChannelManage);
   routes.set("/poster", Poster);
+  routes.set("/pdf", Pdf);
   routes.set("/go/:place", Go);
 
   routes.set(/^\/(v|c|s)$/, Go);

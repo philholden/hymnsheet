@@ -61,7 +61,7 @@
         // really should be ipns name
         v: params.channelId,
         d: displayName,
-        a: channel.allowAll,
+        a: channel.allowAll ? "true" : undefined,
         l: channel.allowList,
         i: ipns
       });

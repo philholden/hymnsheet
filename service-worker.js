@@ -5,8 +5,8 @@ importScripts(
 console.log("service-worker");
 
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
-
-self.addEventListener("activate", (event) => {
-  clients.claim();
-  console.log("Now ready to handle fetches!");
-});
+workbox.clientsClaim();
+// self.addEventListener("activate", (event) => {
+//   clients.claim();
+//   console.log("Now ready to handle fetches!");
+// });

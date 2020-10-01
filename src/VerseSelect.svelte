@@ -30,6 +30,7 @@
   getChannelUrl(params.channelId).then(url => (shareUrl = url));
   const liveChannel = getLiveChannel(params.channelId);
   const value = liveChannel.valueStore;
+  window.liveChannel = liveChannel;
   import { oLordMyGod } from "./util";
   import { decodeSong, encodeSong, getVerses } from "./songCodec";
   //  const {valueStore} = liveChannel;
@@ -56,9 +57,16 @@
 
   function pub(key, value) {
     if (sendSong || first) {
+      // liveChannel.pubMajor({
+      //   contentType: "text/pdf",
+      //   src = "https://bafybeidnotxavgm435p3hi24vgjgvlr3svwxymog265yzhpa7pxqb6jwde.ipfs.infura-ipfs.io/",
+      //   page = "1"
+      // });
+      // return;
       liveChannel.pubMajor({
         [key]: value,
         text: song.lyrics,
+        contentType: "text/lyrics",
         first
       });
       first = false;
@@ -129,31 +137,54 @@
     opacity: 0.4;
   }
 </style>
+
 <WakeLock />
 <div class="black" />
 {#if verses.length !== 0}
-<div class:blank class="outer" bind:clientWidth style={`transform: scale3d(${sf},${sf},1)`}>
-  {#each verses as verse, i}
-    <div class="verse" class:selected={verseIndex === i} on:click={() => selectVerse(i)}>
-      {#each verse.lines as line, j}
-        <div class="line">{line}</div>
-      {/each}
-    </div>
-  {/each}
-</div>
+  <div
+    class:blank
+    class="outer"
+    bind:clientWidth
+    style={`transform: scale3d(${sf},${sf},1)`}>
+    {#each verses as verse, i}
+      <div
+        class="verse"
+        class:selected={verseIndex === i}
+        on:click={() => selectVerse(i)}>
+        {#each verse.lines as line, j}
+          <div class="line">{line}</div>
+        {/each}
+      </div>
+    {/each}
+  </div>
 {/if}
-<ShareModal url={shareUrl} bind:show={showShare} title={shareTitle} text={shareText} />
+<ShareModal
+  url={shareUrl}
+  bind:show={showShare}
+  title={shareTitle}
+  text={shareText} />
 <BlackBar backTitle="Songs">
-<BlackButton on:click={()=>push(`/channel/${params.channelId}/songbook/${params.songBookId}/song/select`)}><Icon name="chevronLeft" /></BlackButton>
-<BlackButton on:click={() => showShare = true}><Icon name="share" /></BlackButton>
-<!-- <BlackButton on:click={() => showShare = true}><Icon name="colors" /></BlackButton> -->
-<BlackButton on:click={toggleShowSong}><Icon name={showSong? "verse":"wholeSong"} /></BlackButton>
-<BlackButton on:click={toggleBlank}><Icon name={blank?"verse":"blank"} color={blank?"orange": "white"} /></BlackButton>
+  <BlackButton
+    on:click={() => push(`/channel/${params.channelId}/songbook/${params.songBookId}/song/select`)}>
+    <Icon name="chevronLeft" />
+  </BlackButton>
+  <BlackButton on:click={() => (showShare = true)}>
+    <Icon name="share" />
+  </BlackButton>
+  <!-- <BlackButton on:click={() => showShare = true}><Icon name="colors" /></BlackButton> -->
+  <BlackButton on:click={toggleShowSong}>
+    <Icon name={showSong ? 'verse' : 'wholeSong'} />
+  </BlackButton>
+  <BlackButton on:click={toggleBlank}>
+    <Icon name={blank ? 'verse' : 'blank'} color={blank ? 'orange' : 'white'} />
+  </BlackButton>
 
-{#if !/iPhone/.test(navigator.userAgent)}
-<BlackButton on:click={onFullScreen}><Icon name={document.fullscreenElement && count ? "fullScreenExit": "fullScreen"} /></BlackButton>
-{/if}
-</BlackBar> 
+  {#if !/iPhone/.test(navigator.userAgent)}
+    <BlackButton on:click={onFullScreen}>
+      <Icon
+        name={document.fullscreenElement && count ? 'fullScreenExit' : 'fullScreen'} />
+    </BlackButton>
+  {/if}
+</BlackBar>
 
-
-<svelte:window bind:innerWidth  />
+<svelte:window bind:innerWidth />

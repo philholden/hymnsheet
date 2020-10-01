@@ -16,7 +16,7 @@ window.clearChannels = () => clear(db);
 export const channels = writable([]);
 export const keys = writable([]);
 
-const sortBy = key => (a, b) =>
+const sortBy = (key) => (a, b) =>
   a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0;
 
 async function listChannels() {
@@ -25,7 +25,7 @@ async function listChannels() {
 
 export async function getFilterControl(channel) {
   const peerId = await getPeerId();
-  return channel => channel.allowAll || channel.allowList.includes(peerId);
+  return (channel) => channel.allowAll || channel.allowList.includes(peerId);
 }
 
 async function listKeys() {
@@ -34,10 +34,10 @@ async function listKeys() {
 
 export async function hasKey(channelId) {
   const ipfs = await getIpfs();
-  const key = await ipfs.key.list().find(x => x.name === channelId);
+  const key = await ipfs.key.list().find((x) => x.name === channelId);
   if (key.name === channelId) return true;
   const keys = await listKeys();
-  const dbKey = keys.find(x => x.channelId === channelId);
+  const dbKey = keys.find((x) => x.channelId === channelId);
   if (!dbKey) return false;
   await ipfs.key.import(dbKey.channelId, dbKey.pem);
   return true;
@@ -46,8 +46,8 @@ export async function hasKey(channelId) {
 async function restoreKeys() {
   const ipfs = await getIpfs();
   const keys = await listKeys();
-  const active = await ipfs.key.list().map(x => x.name);
-  keys.forEach(key => {
+  const active = await ipfs.key.list().map((x) => x.name);
+  keys.forEach((key) => {
     if (!active.includes(key.channelId))
       ipfs.key.import(key.channelId, key.pem);
   });
@@ -56,10 +56,10 @@ async function restoreKeys() {
 async function addKey(channelId) {
   const ipfs = await getIpfs();
   const keys = await listKeys();
-  if (keys.map(x => x.channelId).includes(channelId)) return;
+  if (keys.map((x) => x.channelId).includes(channelId)) return;
   const { id: ipns } = await ipfs.key.gen(channelId, {
     type: "rsa",
-    size: 2048
+    size: 2048,
   });
   const pem = await ipfs.key.export(channelId, pass);
 
@@ -73,7 +73,7 @@ async function deleteKey(channelId) {
   const ipfs = await getIpfs();
   const keys = await listKeys();
 
-  const next = keys.filter(x => x.channelId !== channelId);
+  const next = keys.filter((x) => x.channelId !== channelId);
   // await ipfs.key.rm(channelId);
   await set("keys", next, db);
   notifyKeys(next);
@@ -101,7 +101,7 @@ export async function createChannel(
 
 export async function addChannel(ipns) {
   const channels = await listChannels();
-  let channel = channels.find(x => x.ipns === ipns);
+  let channel = channels.find((x) => x.ipns === ipns);
   if (channel) return channel;
   channel = await getIpnsJson(ipns);
 
@@ -115,7 +115,7 @@ export async function addChannel(ipns) {
 export async function deleteChannel(channelId) {
   console.log("delete", channelId);
   const channels = await listChannels();
-  const next = channels.filter(x => x.id !== channelId);
+  const next = channels.filter((x) => x.id !== channelId);
   await set("channels", next, db);
   notifyChannels(next);
   await deleteKey(channelId);
@@ -126,7 +126,7 @@ export async function setChannel(channelId, next) {
   const channels = await listChannels();
   //channels.map(channel => (channelId === channel.id ? next : channel));
 
-  const _channels = channels.filter(x => channelId !== x.id);
+  const _channels = channels.filter((x) => channelId !== x.id);
   _channels.push(next);
   _channels.sort(sortBy("displayName"));
   await set("channels", _channels, db);
@@ -137,7 +137,7 @@ export async function updateChannel(channelId, update) {
   const channels = await listChannels();
   //channels.map(channel => (channelId === channel.id ? next : channel));
 
-  const _channels = channels.map(x => (channelId === x.id ? update(x) : x));
+  const _channels = channels.map((x) => (channelId === x.id ? update(x) : x));
   _channels.sort(sortBy("displayName"));
   await set("channels", _channels, db);
   notifyChannels(_channels);
@@ -146,12 +146,11 @@ export async function updateChannel(channelId, update) {
 export async function getChannel(channelId) {
   const channels = await listChannels();
   console.log("channels", channels);
-  return channels.find(channel => channelId === channel.id);
+  return channels.find((channel) => channelId === channel.id);
 }
 
 export async function getChannelUrl(channelId) {
   const channel = await getChannel(channelId);
-  console.log(channel, "channnn", channelId);
   return (
     window.location.origin +
     window.location.pathname +
@@ -160,9 +159,9 @@ export async function getChannelUrl(channelId) {
       // really should be ipns name
       v: channelId,
       d: channel.displayName,
-      a: channel.allowAll,
+      a: channel.allowAll ? "true" : undefined,
       l: channel.allowList,
-      i: channel.ipns
+      i: channel.ipns,
     })
   );
 }
@@ -170,7 +169,7 @@ export async function getChannelUrl(channelId) {
 export async function isAdmin(channelId) {
   const ipfs = await getIpfs();
   const keys = await ipfs.key.list();
-  return keys.find(x => x.name === channelId);
+  return keys.find((x) => x.name === channelId);
 }
 
 async function notifyChannels(_channels) {
@@ -185,7 +184,7 @@ Object.assign(channels, {
   create: createChannel,
   getFilterControl,
   get: getChannel,
-  delete: deleteChannel
+  delete: deleteChannel,
 });
 
 notifyChannels();
