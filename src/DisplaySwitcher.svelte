@@ -82,7 +82,7 @@
       {:else if $value.contentType === 'pdf/page'}
         <PdfPage {...$value} />
       {:else if $value.contentType === 'text/quote'}
-        <QuoteFit {...$value} />
+        <QuoteFit {...$value.value} />
       {/if}
     {/if}
   </div>

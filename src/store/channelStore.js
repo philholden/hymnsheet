@@ -2,6 +2,8 @@ import { getIpfs, getIpnsJson, setIpnsJson, getPeerId } from "./ipfs";
 import { setChannel, getChannel, hasKey } from "./channelDb";
 import { updateQueue } from "./updateQueue";
 import { writable } from "svelte/store";
+import { getCloudTime, onCloudTime } from "./cloudTime";
+import { findPlayingAudio } from "../util";
 
 const _fibonacci = [800, 1300, 2100, 3400, 5500, 8900, 14400, 23300, 37700];
 
@@ -19,6 +21,7 @@ export function getChannelStore(channelId, placeholder) {
     pubSub("minor", onMinor);
     pubSub("init", onInit);
     pubSub("ipns", onIpns);
+    pubSub("audio", onAudio);
     join();
   }
 
@@ -38,13 +41,50 @@ export function getChannelStore(channelId, placeholder) {
     ping();
   }
 
+  const onAudio = on(async ({ body }, { from }) => {
+    const { src, command, settings, time, offset = 0, volume = 1 } = body;
+    let audio = findPlayingAudio(src);
+    //console.log(audio, audios, command, src, "audio");
+    if (!audio) {
+      if (command !== "play") return;
+      console.log("add audio");
+      audio = document.createElement("audio");
+      document.body.appendChild(audio);
+      audio.className = "audio";
+      audio.src = src;
+      audio.preload = true;
+    }
+    if (command === "play") {
+      const cloudTime = getCloudTime();
+      console.log("cloudTime", cloudTime, time, time - cloudTime);
+      if (cloudTime > time) {
+        audio.play();
+        audio.currentTime = cloudTime - time + offset;
+      } else {
+        audio.currentTime = offset;
+        onCloudTime(() => audio.play(), time || 0);
+      }
+    }
+    if (command === "pause") {
+      console.log("pause");
+      audio.pause();
+    }
+    if (command === "stop") {
+      console.log("stop");
+      audio.pause();
+      audio.currentTime = 0;
+      document.body.removeChild(audio);
+    }
+    audio.volume = volume;
+  });
+
   const onMajor = on(async ({ majorCount, body }, { from }) => {
     console.log("onMajor", majorCount, body, from);
     _updateQueue.addMajor({
       majorPeerId: from,
       minorCount: 0,
       majorCount,
-      body
+      body,
     });
     // can init so stop listening
     pubUnsub("init", onInit);
@@ -63,7 +103,7 @@ export function getChannelStore(channelId, placeholder) {
         minorPeerId: from,
         majorCount,
         minorCount,
-        body
+        body,
       });
       pubUnsub("join", onJoin);
       notifyValue();
@@ -76,7 +116,7 @@ export function getChannelStore(channelId, placeholder) {
     _updateQueue.addMajor({
       majorPeerId,
       majorCount,
-      body
+      body,
     });
     pubUnsub("init", onInit);
     console.log("init");
@@ -89,7 +129,7 @@ export function getChannelStore(channelId, placeholder) {
     metaStore.set(content);
   }
 
-  const onJoin = on(async data => {
+  const onJoin = on(async (data) => {
     if (performance.now() - initTime > 1000) {
       pubInit();
     } else {
@@ -132,12 +172,19 @@ export function getChannelStore(channelId, placeholder) {
       majorPeerId: latest.majorPeerId,
       minorPeerId,
       majorCount: latest.majorCount,
-      minorCount: latest.minorCount + 1
+      minorCount: latest.minorCount + 1,
     };
     pub("minor", next);
     _updateQueue.addMinor(next);
     pubSub("join", onJoin);
     notifyValue();
+  }
+
+  async function pubAudio(body) {
+    if (body.command === "play" && body.time === undefined) {
+      body.time = getCloudTime() + 5000;
+    }
+    pub("audio", { body });
   }
 
   async function updateIpnsContent(channelId, update) {
@@ -153,7 +200,7 @@ export function getChannelStore(channelId, placeholder) {
   }
 
   function destroy() {
-    Object.values(timeouts).forEach(timeout => clearTimeout);
+    Object.values(timeouts).forEach((timeout) => clearTimeout);
     pubUnsub("major", onMajor);
     pubUnsub("minor", onMinor);
     pubUnsub("init", onInit);
@@ -183,7 +230,7 @@ export function getChannelStore(channelId, placeholder) {
   }
 
   function on(fn, dropMe) {
-    return async msg => {
+    return async (msg) => {
       const peerId = await getPeerId();
       const data = JSON.parse(msg.data.toString());
       const fromSelf = peerId === msg.from;
@@ -208,9 +255,10 @@ export function getChannelStore(channelId, placeholder) {
     getId,
     pubMajor,
     pubMinor,
+    pubAudio,
     updateIpnsContent,
     destroy,
     valueStore,
-    metaStore
+    metaStore,
   };
 }

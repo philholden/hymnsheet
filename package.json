@@ -27,7 +27,7 @@
   "dependencies": {
     "@omysoul/svelte-song-display": "^0.4.3",
     "@omysoul/svelte-quote-fit": "^0.2.3",
-    "@omysoul/svelte-pdf-viewer": "^0.0.2",
+    "@omysoul/svelte-pdf-viewer": "^0.0.3",
     "googlish": "^0.0.8",
     "idb-keyval": "^3.2.0",
     "ipfs": "^0.50.2",

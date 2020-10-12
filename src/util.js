@@ -22,13 +22,13 @@ export const googlish = (
   const words = /[^\s"']+/g;
   const quoted = query.match(inquotes) || [];
   const rest = query.replace(inquotes, "").match(words) || [];
-  const trim = s => s.substr(1, s.length - 2);
+  const trim = (s) => s.substr(1, s.length - 2);
   const dequoted = quoted.map(trim);
   const cs = caseSensitive ? "" : "i";
   const wb = wholeWords ? "\\b" : "";
-  const toRegExp = word => new RegExp(wb + word + wb, cs);
+  const toRegExp = (word) => new RegExp(wb + word + wb, cs);
   const regExps = [...dequoted, ...rest].map(toRegExp);
-  return text => {
+  return (text) => {
     let i = 0;
     while (
       regExps[i] &&
@@ -64,8 +64,16 @@ export function grow(node, value) {
     update,
     destroy: () => {
       node.removeEventListener("focus", update);
-    }
+    },
   };
+}
+
+export function findPlayingAudio(src) {
+  const aud = document.querySelectorAll("audio.audio");
+  const audios = aud ? Array.from(aud) : [];
+  return audios.find((x) => {
+    return x.src === src;
+  });
 }
 
 export const oLordMyGod = `title: How great Thou art

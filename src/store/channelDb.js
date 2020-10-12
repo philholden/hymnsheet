@@ -12,6 +12,7 @@ import { setUrlData } from "../util";
 
 const db = new Store("channels-hs", "channels-hs");
 window.clearChannels = () => clear(db);
+window.db = db;
 
 export const channels = writable([]);
 export const keys = writable([]);

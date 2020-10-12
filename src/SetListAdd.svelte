@@ -1,0 +1,71 @@
+<script>
+  import {
+    Header,
+    Title,
+    TitleRow,
+    Button,
+    ListItem,
+    List,
+    BottomBar,
+    EmptyState,
+    SearchInput,
+    Sock,
+    QrReaderModal,
+    InputModal
+  } from "./common";
+  import { googlish } from "./util";
+  import { push } from "svelte-spa-router";
+  import { setlists } from "./store/songBook";
+  export let params = {};
+  const linkIcon = "edit";
+  const backLink = `/channel/${params.channelId}/manage`;
+  const backText = `Manage channel`;
+  const getUrl = id => `/channel/${params.channelId}/setlist/${id}`;
+
+  let search = "";
+  let filter;
+  let showModal = false;
+  let showNameModal = false;
+  $: filter = googlish(search, false, false, x => `${x.displayName}`);
+</script>
+
+<style>
+
+</style>
+
+<QrReaderModal
+  url="https://"
+  title="Scan song book Qr code"
+  bind:show={showModal} />
+<InputModal
+  bind:show={showNameModal}
+  onAdd={setlists.add}
+  placeholder="Setlist name" />
+<Header />
+<Sock>
+  <TitleRow>
+    <Title>Set Lists</Title>
+  </TitleRow>
+  <SearchInput placeholder="Search" bind:value={search} />
+  {#if $setlists.length !== 0}
+    <List style="margin-top: 16px">
+      {#each $setlists.filter(filter) as { displayName, id }}
+        <ListItem href={getUrl(id)} icon={linkIcon}>{displayName}</ListItem>
+      {/each}
+    </List>
+  {:else}
+    <EmptyState style="margin-top: 18px;" icon="music">
+      To create a setlist,
+      <br />
+      click '+ Add'
+    </EmptyState>
+  {/if}
+
+</Sock>
+<BottomBar>
+  <Button invisible iconLeft="chevronLeft" href={backLink}>{backText}</Button>
+  <Button iconLeft="qrScanner" on:click={() => (showModal = true)}>
+    Import
+  </Button>
+  <Button iconLeft="add" on:click={() => (showNameModal = true)}>Add</Button>
+</BottomBar>

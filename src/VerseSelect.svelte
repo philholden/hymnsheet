@@ -58,9 +58,9 @@
   function pub(key, value) {
     if (sendSong || first) {
       // liveChannel.pubMajor({
-      //   contentType: "text/pdf",
-      //   src = "https://bafybeidnotxavgm435p3hi24vgjgvlr3svwxymog265yzhpa7pxqb6jwde.ipfs.infura-ipfs.io/",
-      //   page = "1"
+      //   contentType: "pdf/page",
+      //   src :"https://bafybeidnotxavgm435p3hi24vgjgvlr3svwxymog265yzhpa7pxqb6jwde.ipfs.infura-ipfs.io/",
+      //   page:1
       // });
       // return;
       liveChannel.pubMajor({

@@ -1,8 +1,9 @@
 import App from "./App.svelte";
 import { getIpfs } from "./store/ipfs";
+import { onCloudTime } from "./store/cloudTime";
 
 const app = new App({
-  target: document.body,
+  target: document.getElementById("root"),
 });
 
 export default app;
