@@ -12,7 +12,8 @@
   import ChannelManage from "./ChannelManage.svelte";
   import Poster from "./Poster.svelte";
   import VerseSelect from "./VerseSelect.svelte";
-  import SetList from "./SetList.svelte";
+  import Setlist from "./Setlist.svelte";
+  import SetlistAdd from "./SetlistAdd.svelte";
   import Go from "./Go.svelte";
   import Pdf from "./Pdf.svelte";
   import Now from "./Now.svelte";
@@ -36,9 +37,10 @@
   routes.set("/songbook/:songBookId/song/:songId/edit", SongEdit);
   routes.set("/songbook/:songBookId/song/add", SongEdit);
   routes.set("/songbook/add", SongBookListAdd);
-  routes.set("/setlist/:setListId", SetList);
+  routes.set("/setlist/:setListId", Setlist);
   routes.set("/channel/:channelId/songbook/select", SongBookListAdd);
-  routes.set("/channel/:channelId/setlist/:setlistId", SetList);
+  routes.set("/channel/:channelId/setlist/", SetlistAdd);
+  routes.set("/channel/:channelId/setlist/:setlistId", Setlist);
   routes.set("/channel/list", ChannelList);
   routes.set("/channel/list/add", ChannelListAdd);
   routes.set("/channel/:channelId/manage", ChannelManage);

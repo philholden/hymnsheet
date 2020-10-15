@@ -1,4 +1,5 @@
 <script>
+  import { Store, set, get, del, clear, getStore } from "./store/storeDb";
   import {
     Header,
     Title,
@@ -14,13 +15,36 @@
     InputModal
   } from "./common";
   import { googlish } from "./util";
+  import { nanoid } from "nanoid";
+
   import { push } from "svelte-spa-router";
   import { setlists } from "./store/songBook";
   export let params = {};
-  const linkIcon = "edit";
+  const db = new Store("setlists", "setlists");
+  let list;
+
+  const linkIcon = "chevronRight";
   const backLink = `/channel/${params.channelId}/manage`;
   const backText = `Manage channel`;
   const getUrl = id => `/channel/${params.channelId}/setlist/${id}`;
+
+  init();
+  async function init() {
+    list = await getStore("list", db, []);
+  }
+
+  function addItem(displayName) {
+    const item = {
+      id: nanoid(),
+      displayName
+    };
+    console.log("add item", displayName);
+    set("list", [...$list, item], db);
+  }
+
+  function removeIndex(index) {
+    set("list", $list.filter((x, i) => i !== index), db);
+  }
 
   let search = "";
   let filter;
@@ -35,21 +59,21 @@
 
 <QrReaderModal
   url="https://"
-  title="Scan song book Qr code"
+  title="Scan setlist Qr code"
   bind:show={showModal} />
 <InputModal
   bind:show={showNameModal}
-  onAdd={setlists.add}
+  onAdd={addItem}
   placeholder="Setlist name" />
 <Header />
 <Sock>
   <TitleRow>
-    <Title>Set Lists</Title>
+    <Title>Setlists</Title>
   </TitleRow>
   <SearchInput placeholder="Search" bind:value={search} />
-  {#if $setlists.length !== 0}
+  {#if $list && $list.length !== 0}
     <List style="margin-top: 16px">
-      {#each $setlists.filter(filter) as { displayName, id }}
+      {#each $list.filter(filter) as { displayName, id }}
         <ListItem href={getUrl(id)} icon={linkIcon}>{displayName}</ListItem>
       {/each}
     </List>

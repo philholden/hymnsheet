@@ -108,8 +108,14 @@
       <ButtonContent
         href={`/channel/${params.channelId}/songbook/select`}
         icon="live"
-        title="Broadcast now">
+        title="Broadcast from song book">
         Go live, then select verses to sing.
+      </ButtonContent>
+      <ButtonContent
+        href={`/channel/${params.channelId}/setlist/`}
+        icon="live"
+        title="Broadcast from setlist">
+        Broadcast a mix of songs, audio, slides and quotes.
       </ButtonContent>
       <ButtonContent
         href="/"
