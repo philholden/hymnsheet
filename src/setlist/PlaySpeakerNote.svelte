@@ -6,7 +6,7 @@
   div {
     font-size: 18px;
     color: #888;
-    padding: 0 24px;
+    padding: 0 16px;
   }
 </style>
 

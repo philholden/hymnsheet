@@ -24,6 +24,33 @@ export async function getIpfs() {
       },
     });
   }
+  window._ipfs = await _ipfs;
+  return await _ipfs;
+}
+
+export async function getIpfs2() {
+  if (!_ipfs) {
+    _ipfs = IPFS.create({
+      libp2p: {
+        modules: {
+          transport: [WS, WebRTCStar],
+          streamMuxer: [MPLEX],
+          connEncryption: [NOISE],
+          peerDiscovery: [Bootstrap],
+          dht: KadDHT,
+          pubsub: gossipsub,
+        },
+        config: {
+          pubsub: {
+            enabled: true,
+            emitSelf: false,
+            signMessages: true,
+            strictSigning: true,
+          },
+        },
+      },
+    });
+  }
   return await _ipfs;
 }
 

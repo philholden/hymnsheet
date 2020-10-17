@@ -7,3 +7,5 @@ public/pdf.worker.js
 public/pdfViewer.css
 public/pdfViewer.js
 public/service-worker.js
+public/cert.pem
+public/key.pem

@@ -1,6 +1,7 @@
 //import { Store, set, get, del, clear } from "idb-keyval";
 import * as idb from "idb-keyval";
 import { writable } from "svelte/store";
+import { getIpfs } from "./ipfs";
 
 let cache = {};
 let stores = {};
@@ -53,4 +54,57 @@ export async function getStore(key, db, init = null) {
 async function getKey(key, db) {
   await db._dbp;
   return `${db.storeName}/${key}`;
+}
+
+export async function getSetlistDisplayName(setlistId) {
+  const db = new Store("setlist", "setlist");
+  const list = await get("list", db);
+  if (!list) return;
+  const item = list.find((item) => item.id === setlistId);
+  if (!item) return;
+  return item.displayName;
+}
+
+export async function ipfsExportSetlist(setlistId) {
+  const db = new Store("setlist", "setlist");
+  const list = await get("list", db);
+  if (!list) return;
+  const item = list.find((item) => item.id === setlistId);
+  const db2 = new Store(setlistId, setlistId);
+  const setlist = await get("list", db2);
+  const ipfs = await getIpfs();
+  return (
+    await ipfs.add(
+      JSON.stringify({ id: setlistId, displayName: item.displayName, setlist })
+    )
+  ).path;
+}
+
+export async function ipfsImportSetlist(path, callback = () => {}) {
+  const ipfs = await getIpfs();
+  const stream = ipfs.cat(path);
+
+  let data = "";
+
+  for await (const chunk of stream) {
+    // chunks of data are returned as a Buffer, convert it back to a string
+    data += chunk.toString();
+  }
+
+  const _data = JSON.parse(data);
+  let db = new Store("setlist", "setlist");
+  let list = (await get("list", db)) || [];
+  let index = list.findIndex((x) => x.id === _data.id);
+  let item = { id: _data.id, displayName: _data.displayName };
+  if (index === -1) {
+    list = [...list, item];
+  } else {
+    list = list.map((x) => (x.id === _data.id ? item : x));
+  }
+  let p1 = set("list", list, db);
+  db2 = new Store(_data.setlistId, _data.setlistId);
+  list = (await get("list", db)) || [];
+  let p2 = set("list", list, db);
+  await Promise.all([p1, p2]);
+  return _data.id;
 }

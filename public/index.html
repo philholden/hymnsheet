@@ -6,7 +6,8 @@
       if (
         "serviceWorker" in navigator &&
         !/localhost/.test(window.location.host) &&
-        !/127\.0\.0\.1/.test(window.location.host)
+        !/127\.0\.0\.1/.test(window.location.host) &&
+        !/192\.168\.1\.12/.test(window.location.host)
       ) {
         // Use the window load event to keep the page load performant
         window.addEventListener("load", () => {

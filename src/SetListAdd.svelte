@@ -20,7 +20,7 @@
   import { push } from "svelte-spa-router";
   import { setlists } from "./store/songBook";
   export let params = {};
-  const db = new Store("setlists", "setlists");
+  const db = new Store("setlist", "setlist");
   let list;
 
   const linkIcon = "chevronRight";
