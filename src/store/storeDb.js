@@ -102,9 +102,8 @@ export async function ipfsImportSetlist(path, callback = () => {}) {
     list = list.map((x) => (x.id === _data.id ? item : x));
   }
   let p1 = set("list", list, db);
-  db2 = new Store(_data.setlistId, _data.setlistId);
-  list = (await get("list", db)) || [];
-  let p2 = set("list", list, db);
+  db = new Store(_data.id, _data.id);
+  let p2 = set("list", _data.setlist, db);
   await Promise.all([p1, p2]);
   return _data.id;
 }
