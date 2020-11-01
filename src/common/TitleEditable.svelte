@@ -13,7 +13,7 @@
 </script>
 
 <style>
-  /* .buttons {
+  .buttons {
     display: grid;
     grid-template-columns: min-content min-content;
     justify-content: space-between;
@@ -21,7 +21,7 @@
   .outer {
     display: flex;
     align-items: center;
-  } */
+  }
 </style>
 
 <div class="outer">

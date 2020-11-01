@@ -4,7 +4,7 @@
     display: grid;
     gap: 1rem;
     padding: 16px 0 8px;
-    /* grid-template-columns: 1fr min-content; */
+    grid-template-columns: 1fr min-content;
     align-items: center;
   }
 </style>
