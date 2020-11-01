@@ -30,7 +30,7 @@ module.exports = {
         use: {
           loader: "svelte-loader",
           options: {
-            emitCss: true,
+            emitCss: false,
             hotReload: true,
             // hotOptions: {
             //   // whether to preserve local state (i.e. any `let` variable) or
