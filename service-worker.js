@@ -5,6 +5,7 @@ importScripts(
 console.log("service-worker");
 
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+workbox.skipWaiting();
 workbox.clientsClaim();
 // self.addEventListener("activate", (event) => {
 //   clients.claim();
